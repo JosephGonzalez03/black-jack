@@ -21,22 +21,6 @@ impl Game {
             let new_index = rng.gen_range(0..=51);
             new_card = self.card_deck[new_index];
             if new_card != 0 {
-                if new_card == -1 {
-                    'ace_value: loop {
-                        let mut answer = String::new();
-                        println!("You drew an ace. Would you to treat it as a 1 or 11?");
-                        io::stdin()
-                            .read_line(&mut answer)
-                            .expect("Failed to read line.");
-
-                        let answer: i32 = answer.trim().parse().expect("Please type a number!");
-
-                        if answer == 1 || answer == 11 {
-                            new_card = answer;
-                            break 'ace_value;
-                        }
-                    }
-                }
                 self.card_deck[new_index] = 0;
                 break 'draw;
             }
@@ -44,7 +28,23 @@ impl Game {
         return new_card
     }
 
-    fn add_to_hand(&mut self, card: i32) {
+    fn add_to_hand(&mut self, mut card: i32) {
+        if card == -1 {
+            'ace_value: loop {
+                let mut answer = String::new();
+                println!("You drew an ace. Would you to treat it as a 1 or 11?");
+                io::stdin()
+                    .read_line(&mut answer)
+                    .expect("Failed to read line.");
+
+                let answer: i32 = answer.trim().parse().expect("Please type a number!");
+
+                if answer == 1 || answer == 11 {
+                    card = answer;
+                    break 'ace_value;
+                }
+            }
+        }
         self.player_hand[self.turn] = card;
     }
 
