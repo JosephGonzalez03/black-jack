@@ -1,5 +1,5 @@
-use std::io;
 use rand::Rng;
+use std::io;
 
 enum Suit {
     CLUB,
@@ -85,16 +85,17 @@ impl BlackJack {
         self.card_deck.push(Card::JACK(Suit::DIAMOND));
         self.card_deck.push(Card::JACK(Suit::HEART));
         self.card_deck.push(Card::JACK(Suit::SPADE));
-        self.card_deck.push(Card::ACE(1,Suit::CLUB));
-        self.card_deck.push(Card::ACE(1,Suit::DIAMOND));
-        self.card_deck.push(Card::ACE(1,Suit::HEART));
-        self.card_deck.push(Card::ACE(1,Suit::SPADE));
+        self.card_deck.push(Card::ACE(1, Suit::CLUB));
+        self.card_deck.push(Card::ACE(1, Suit::DIAMOND));
+        self.card_deck.push(Card::ACE(1, Suit::HEART));
+        self.card_deck.push(Card::ACE(1, Suit::SPADE));
     }
+
     fn draw_card(&mut self) -> Card {
         let mut rng = rand::thread_rng();
         let new_index = rng.gen_range(0..=self.card_deck.len());
         let new_card = self.card_deck.remove(new_index);
-        return new_card
+        return new_card;
     }
 
     fn add_to_hand(&mut self, mut card: Card) {
@@ -134,7 +135,7 @@ impl BlackJack {
                 Card::KING(_) => sum + 10,
                 Card::QUEEN(_) => sum + 10,
                 Card::JACK(_) => sum + 10,
-                Card::ACE(value,_) => sum + value,
+                Card::ACE(value, _) => sum + value,
             }
         }
         println!("You're hand is at {}", sum);
