@@ -30,12 +30,12 @@ enum GameState {
     CONTINUE,
 }
 
-struct Game {
+struct BlackJack {
     card_deck: Vec<Card>,
     player_hand: Vec<Card>,
 }
 
-impl Game {
+impl BlackJack {
     fn prepare_deck(&mut self) {
         self.card_deck.push(Card::TWO(Suit::CLUB));
         self.card_deck.push(Card::TWO(Suit::DIAMOND));
@@ -146,13 +146,12 @@ impl Game {
         }
 
         return GameState::CONTINUE;
-
     }
 }
 
 fn main() {
     //let mut dealer_hand: [i32; 52] = [0;52];
-    let mut game = Game {
+    let mut game = BlackJack {
         card_deck: Vec::new(),
         player_hand: Vec::new(),
     };
