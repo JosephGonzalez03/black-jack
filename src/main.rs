@@ -1,3 +1,6 @@
+use std::io;
+use crate::games::black_jack::BlackJack;
+use crate::games::*;
 
 pub mod games;
 
@@ -17,12 +20,12 @@ fn main() {
             let card = game.draw_card();
             game.add_to_hand(card);
             match game.get_game_state() {
-                CONTINUE => (),
-                WIN => {
+                GameState::CONTINUE => (),
+                GameState::WIN => {
                     println!("You win!");
                     break 'game;
                 }
-                LOSE => {
+                GameState::LOSE => {
                     println!("You lose!");
                     break 'game;
                 }

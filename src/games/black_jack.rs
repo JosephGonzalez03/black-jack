@@ -3,69 +3,38 @@ use rand::Rng;
 use super::GameState;
 use super::Suit;
 use super::Card;
+use strum::IntoEnumIterator;
 
-struct BlackJack {
+pub struct BlackJack {
     card_deck: Vec<Card>,
     player_hand: Vec<Card>,
 }
 
 impl BlackJack {
-    fn new() -> BlackJack {
+    pub fn new() -> BlackJack {
         let mut card_deck = Vec::new();
         let player_hand = Vec::new();
 
-        card_deck.push(Card::TWO(Suit::CLUB));
-        card_deck.push(Card::TWO(Suit::DIAMOND));
-        card_deck.push(Card::TWO(Suit::HEART));
-        card_deck.push(Card::TWO(Suit::SPADE));
-        card_deck.push(Card::THREE(Suit::CLUB));
-        card_deck.push(Card::THREE(Suit::DIAMOND));
-        card_deck.push(Card::THREE(Suit::HEART));
-        card_deck.push(Card::THREE(Suit::SPADE));
-        card_deck.push(Card::FOUR(Suit::CLUB));
-        card_deck.push(Card::FOUR(Suit::DIAMOND));
-        card_deck.push(Card::FOUR(Suit::HEART));
-        card_deck.push(Card::FOUR(Suit::SPADE));
-        card_deck.push(Card::FIVE(Suit::CLUB));
-        card_deck.push(Card::FIVE(Suit::DIAMOND));
-        card_deck.push(Card::FIVE(Suit::HEART));
-        card_deck.push(Card::FIVE(Suit::SPADE));
-        card_deck.push(Card::SIX(Suit::CLUB));
-        card_deck.push(Card::SIX(Suit::DIAMOND));
-        card_deck.push(Card::SIX(Suit::HEART));
-        card_deck.push(Card::SIX(Suit::SPADE));
-        card_deck.push(Card::SEVEN(Suit::CLUB));
-        card_deck.push(Card::SEVEN(Suit::DIAMOND));
-        card_deck.push(Card::SEVEN(Suit::HEART));
-        card_deck.push(Card::SEVEN(Suit::SPADE));
-        card_deck.push(Card::EIGHT(Suit::CLUB));
-        card_deck.push(Card::EIGHT(Suit::DIAMOND));
-        card_deck.push(Card::EIGHT(Suit::HEART));
-        card_deck.push(Card::EIGHT(Suit::SPADE));
-        card_deck.push(Card::NINE(Suit::CLUB));
-        card_deck.push(Card::NINE(Suit::DIAMOND));
-        card_deck.push(Card::NINE(Suit::HEART));
-        card_deck.push(Card::NINE(Suit::SPADE));
-        card_deck.push(Card::TEN(Suit::CLUB));
-        card_deck.push(Card::TEN(Suit::DIAMOND));
-        card_deck.push(Card::TEN(Suit::HEART));
-        card_deck.push(Card::TEN(Suit::SPADE));
-        card_deck.push(Card::KING(Suit::CLUB));
-        card_deck.push(Card::KING(Suit::DIAMOND));
-        card_deck.push(Card::KING(Suit::HEART));
-        card_deck.push(Card::KING(Suit::SPADE));
-        card_deck.push(Card::QUEEN(Suit::CLUB));
-        card_deck.push(Card::QUEEN(Suit::DIAMOND));
-        card_deck.push(Card::QUEEN(Suit::HEART));
-        card_deck.push(Card::QUEEN(Suit::SPADE));
-        card_deck.push(Card::JACK(Suit::CLUB));
-        card_deck.push(Card::JACK(Suit::DIAMOND));
-        card_deck.push(Card::JACK(Suit::HEART));
-        card_deck.push(Card::JACK(Suit::SPADE));
-        card_deck.push(Card::ACE(1, Suit::CLUB));
-        card_deck.push(Card::ACE(1, Suit::DIAMOND));
-        card_deck.push(Card::ACE(1, Suit::HEART));
-        card_deck.push(Card::ACE(1, Suit::SPADE));
+        for suit in Suit::iter() {
+            for card in Card::iter() {
+                card_deck.push(card(suit));
+            }
+        }
+        for suit in Suit::iter() {
+            card_deck.push(Card::TWO(suit));
+            card_deck.push(Card::THREE(suit));
+            card_deck.push(Card::FOUR(suit));
+            card_deck.push(Card::FIVE(suit));
+            card_deck.push(Card::SIX(suit));
+            card_deck.push(Card::SEVEN(suit));
+            card_deck.push(Card::EIGHT(suit));
+            card_deck.push(Card::NINE(suit));
+            card_deck.push(Card::TEN(suit));
+            card_deck.push(Card::KING(suit));
+            card_deck.push(Card::QUEEN(suit));
+            card_deck.push(Card::JACK(suit));
+            card_deck.push(Card::ACE(1, suit));
+        }
 
         BlackJack {
            card_deck,
@@ -73,14 +42,14 @@ impl BlackJack {
         }
     }
 
-    fn draw_card(&mut self) -> Card {
+    pub fn draw_card(&mut self) -> Card {
         let mut rng = rand::thread_rng();
         let new_index = rng.gen_range(0..=self.card_deck.len());
         let new_card = self.card_deck.remove(new_index);
         return new_card;
     }
 
-    fn add_to_hand(&mut self, mut card: Card) {
+    pub fn add_to_hand(&mut self, mut card: Card) {
         if let Card::ACE(_, suit) = card {
             'ace_value: loop {
                 let mut answer = String::new();
@@ -100,7 +69,7 @@ impl BlackJack {
         self.player_hand.push(card);
     }
 
-    fn get_game_state(&self) -> GameState {
+    pub fn get_game_state(&self) -> GameState {
         let mut sum = 0;
 
         for card in &self.player_hand {
