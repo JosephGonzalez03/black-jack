@@ -67,6 +67,8 @@ impl BlackJack {
     pub fn get_game_state(&self) -> GameState {
         let mut sum = 0;
 
+        std::process::Command::new("clear").status().unwrap();
+
         for card in &self.player_hand {
             sum = match card {
                 Card::TWO(_) => sum + 2,
@@ -82,9 +84,10 @@ impl BlackJack {
                 Card::QUEEN(_) => sum + 10,
                 Card::JACK(_) => sum + 10,
                 Card::ACE(value, _) => sum + value,
-            }
+            };
+            println!("{}", card);
         }
-        println!("You're hand is at {}", sum);
+        println!("\nYou're hand is at {}", sum);
 
         if sum > 21 {
             return GameState::LOSE;
