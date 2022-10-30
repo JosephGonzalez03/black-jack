@@ -7,9 +7,8 @@ pub enum GameState {
     CONTINUE,
 }
 
-#[derive(EnumIter, Default, Copy, Clone, Debug, PartialEq)]
+#[derive(EnumIter, Copy, Clone, Debug)]
 pub enum Suit {
-    #[default]
     CLUBS,
     DIAMONDS,
     HEARTS,
