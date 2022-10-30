@@ -16,11 +16,6 @@ impl BlackJack {
         let player_hand = Vec::new();
 
         for suit in Suit::iter() {
-            for card in Card::iter() {
-                card_deck.push(card(suit));
-            }
-        }
-        for suit in Suit::iter() {
             card_deck.push(Card::TWO(suit));
             card_deck.push(Card::THREE(suit));
             card_deck.push(Card::FOUR(suit));

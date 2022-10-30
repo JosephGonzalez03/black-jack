@@ -1,4 +1,4 @@
-use strum_macros::{EnumString,EnumIter};
+use strum_macros::{EnumIter};
 pub mod black_jack;
 
 pub enum GameState {
@@ -16,7 +16,6 @@ pub enum Suit {
     SPADE,
 }
 
-#[derive(EnumIter, EnumString, Debug, Copy, Clone, PartialEq)]
 pub enum Card {
     TWO(Suit),
     THREE(Suit),
