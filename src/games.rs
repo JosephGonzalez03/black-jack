@@ -10,10 +10,10 @@ pub enum GameState {
 #[derive(EnumIter, Default, Copy, Clone, Debug, PartialEq)]
 pub enum Suit {
     #[default]
-    CLUB,
-    DIAMOND,
-    HEART,
-    SPADE,
+    CLUBS,
+    DIAMONDS,
+    HEARTS,
+    SPADES,
 }
 
 pub enum Card {
