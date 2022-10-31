@@ -1,4 +1,7 @@
+use rand::Rng;
+use strum::IntoEnumIterator;
 use strum_macros::{EnumIter};
+
 pub mod black_jack;
 
 pub enum GameState {
@@ -49,4 +52,42 @@ impl std::fmt::Display for Card {
             Card::ACE(value, suit) => write!(f, "{} of {:?} ({})", "Ace", suit, value),
         }
     }
+}
+
+pub struct CardDeck {
+    cards: Vec<Card>,
+}
+
+impl CardDeck {
+    pub fn new() -> CardDeck {
+        let mut cards = Vec::new();
+
+        for suit in Suit::iter() {
+            cards.push(Card::TWO(suit));
+            cards.push(Card::THREE(suit));
+            cards.push(Card::FOUR(suit));
+            cards.push(Card::FIVE(suit));
+            cards.push(Card::SIX(suit));
+            cards.push(Card::SEVEN(suit));
+            cards.push(Card::EIGHT(suit));
+            cards.push(Card::NINE(suit));
+            cards.push(Card::TEN(suit));
+            cards.push(Card::KING(suit));
+            cards.push(Card::QUEEN(suit));
+            cards.push(Card::JACK(suit));
+            cards.push(Card::ACE(1, suit));
+        }
+
+        CardDeck {
+            cards,
+        }
+    }
+
+    pub fn draw_card(&mut self) -> Card {
+        let mut rng = rand::thread_rng();
+        let new_index = rng.gen_range(0..=self.cards.len());
+        let new_card = self.cards.remove(new_index);
+        return new_card;
+    }
+
 }

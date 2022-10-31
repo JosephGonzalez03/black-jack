@@ -1,47 +1,20 @@
 use std::io;
-use rand::Rng;
-use super::GameState;
-use super::Suit;
-use super::Card;
-use strum::IntoEnumIterator;
+use super::{Card,CardDeck,GameState};
 
 pub struct BlackJack {
-    card_deck: Vec<Card>,
+    card_deck: CardDeck,
     player_hand: Vec<Card>,
 }
 
 impl BlackJack {
     pub fn new() -> BlackJack {
-        let mut card_deck = Vec::new();
+        let card_deck = CardDeck::new();
         let player_hand = Vec::new();
-
-        for suit in Suit::iter() {
-            card_deck.push(Card::TWO(suit));
-            card_deck.push(Card::THREE(suit));
-            card_deck.push(Card::FOUR(suit));
-            card_deck.push(Card::FIVE(suit));
-            card_deck.push(Card::SIX(suit));
-            card_deck.push(Card::SEVEN(suit));
-            card_deck.push(Card::EIGHT(suit));
-            card_deck.push(Card::NINE(suit));
-            card_deck.push(Card::TEN(suit));
-            card_deck.push(Card::KING(suit));
-            card_deck.push(Card::QUEEN(suit));
-            card_deck.push(Card::JACK(suit));
-            card_deck.push(Card::ACE(1, suit));
-        }
 
         BlackJack {
            card_deck,
            player_hand,
         }
-    }
-
-    pub fn draw_card(&mut self) -> Card {
-        let mut rng = rand::thread_rng();
-        let new_index = rng.gen_range(0..=self.card_deck.len());
-        let new_card = self.card_deck.remove(new_index);
-        return new_card;
     }
 
     pub fn add_to_hand(&mut self, mut card: Card) {
@@ -62,6 +35,10 @@ impl BlackJack {
             }
         }
         self.player_hand.push(card);
+    }
+
+    pub fn get_card_deck(&mut self) -> &mut CardDeck {
+        &mut self.card_deck
     }
 
     pub fn get_game_state(&self) -> GameState {
