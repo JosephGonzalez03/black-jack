@@ -1,19 +1,19 @@
 use std::io;
-use super::{Card,CardDeck,GameState};
+use super::{Card,CardDeck,GameState,Player};
 
 pub struct BlackJack {
     card_deck: CardDeck,
-    player_hand: Vec<Card>,
+    players: Vec<Player>,
 }
 
 impl BlackJack {
     pub fn new() -> BlackJack {
         let card_deck = CardDeck::new();
-        let player_hand = Vec::new();
+        let players = vec![Player::new(), Player::new()];
 
         BlackJack {
            card_deck,
-           player_hand,
+           players,
         }
     }
 
@@ -35,7 +35,9 @@ impl BlackJack {
                 }
             }
         }
-        self.player_hand.push(card);
+        if let Some(player) = self.players.get_mut(0) {
+            player.add(card);
+        }
     }
 
     pub fn get_game_state(&self) -> GameState {
@@ -43,30 +45,32 @@ impl BlackJack {
 
         std::process::Command::new("clear").status().unwrap();
 
-        for card in &self.player_hand {
-            sum = match card {
-                Card::TWO(_) => sum + 2,
-                Card::THREE(_) => sum + 3,
-                Card::FOUR(_) => sum + 4,
-                Card::FIVE(_) => sum + 5,
-                Card::SIX(_) => sum + 6,
-                Card::SEVEN(_) => sum + 7,
-                Card::EIGHT(_) => sum + 8,
-                Card::NINE(_) => sum + 9,
-                Card::TEN(_) => sum + 10,
-                Card::KING(_) => sum + 10,
-                Card::QUEEN(_) => sum + 10,
-                Card::JACK(_) => sum + 10,
-                Card::ACE(value, _) => sum + value,
-            };
-            println!("{}", card);
-        }
-        println!("\nYou're hand is at {}", sum);
+        if let Some(player) = self.players.get(0) {
+            for card in player.get_cards() {
+                sum = match card {
+                    Card::TWO(_) => sum + 2,
+                    Card::THREE(_) => sum + 3,
+                    Card::FOUR(_) => sum + 4,
+                    Card::FIVE(_) => sum + 5,
+                    Card::SIX(_) => sum + 6,
+                    Card::SEVEN(_) => sum + 7,
+                    Card::EIGHT(_) => sum + 8,
+                    Card::NINE(_) => sum + 9,
+                    Card::TEN(_) => sum + 10,
+                    Card::KING(_) => sum + 10,
+                    Card::QUEEN(_) => sum + 10,
+                    Card::JACK(_) => sum + 10,
+                    Card::ACE(value, _) => sum + value,
+                };
+                println!("{}", card);
+            }
+            println!("\nYou're hand is at {}", sum);
 
-        if sum > 21 {
-            return GameState::LOSE;
-        } else if sum == 21 {
-            return GameState::WIN;
+            if sum > 21 {
+                return GameState::LOSE;
+            } else if sum == 21 {
+                return GameState::WIN;
+            }
         }
 
         return GameState::CONTINUE;

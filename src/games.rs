@@ -91,3 +91,23 @@ impl CardDeck {
     }
 
 }
+
+pub struct Player {
+    cards: Vec<Card>,
+}
+
+impl Player {
+    fn new() -> Player {
+        Player {
+            cards: Vec::<Card>::new(),
+        }
+    }
+
+    fn add(&mut self, card: Card) {
+        self.cards.push(card);
+    }
+
+    fn get_cards(&self) -> &Vec<Card> {
+        &self.cards
+    }
+}
