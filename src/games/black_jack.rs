@@ -2,23 +2,20 @@ use std::io;
 use super::{Card,CardDeck,GameState,Player};
 
 pub struct BlackJack {
-    card_deck: CardDeck,
+    deck: CardDeck,
     players: Vec<Player>,
 }
 
 impl BlackJack {
     pub fn new() -> BlackJack {
-        let card_deck = CardDeck::new();
-        let players = vec![Player::new(), Player::new()];
-
         BlackJack {
-           card_deck,
-           players,
+            deck: CardDeck::new(),
+            players: vec![Player::new(), Player::new()],
         }
     }
 
     pub fn draw(&mut self) {
-        let mut card = self.card_deck.draw();
+        let mut card = self.deck.draw();
         if let Card::ACE(_, suit) = card {
             'ace_value: loop {
                 let mut answer = String::new();
