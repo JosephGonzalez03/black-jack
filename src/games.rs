@@ -59,7 +59,7 @@ pub struct CardDeck {
 }
 
 impl CardDeck {
-    fn new() -> CardDeck {
+    pub fn new() -> CardDeck {
         let mut cards = Vec::new();
 
         for suit in Suit::iter() {
@@ -83,7 +83,7 @@ impl CardDeck {
         }
     }
 
-    fn draw(&mut self) -> Card {
+    pub fn draw(&mut self) -> Card {
         let mut rng = rand::thread_rng();
         let new_index = rng.gen_range(0..=self.cards.len());
         let new_card = self.cards.remove(new_index);
