@@ -83,7 +83,7 @@ impl CardDeck {
         }
     }
 
-    pub fn draw_card(&mut self) -> Card {
+    pub fn draw(&mut self) -> Card {
         let mut rng = rand::thread_rng();
         let new_index = rng.gen_range(0..=self.cards.len());
         let new_card = self.cards.remove(new_index);

@@ -18,8 +18,7 @@ fn main() {
             .expect("Failed to read line.");
 
         if answer.trim().eq("y") {
-            let card = game.get_card_deck().draw_card();
-            game.add_to_hand(card);
+            game.draw();
             match game.get_game_state() {
                 GameState::CONTINUE => (),
                 GameState::WIN => {

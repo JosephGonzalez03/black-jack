@@ -17,7 +17,8 @@ impl BlackJack {
         }
     }
 
-    pub fn add_to_hand(&mut self, mut card: Card) {
+    pub fn draw(&mut self) {
+        let mut card = self.card_deck.draw();
         if let Card::ACE(_, suit) = card {
             'ace_value: loop {
                 let mut answer = String::new();
@@ -35,10 +36,6 @@ impl BlackJack {
             }
         }
         self.player_hand.push(card);
-    }
-
-    pub fn get_card_deck(&mut self) -> &mut CardDeck {
-        &mut self.card_deck
     }
 
     pub fn get_game_state(&self) -> GameState {
