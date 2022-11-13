@@ -59,7 +59,7 @@ pub struct CardDeck {
 }
 
 impl CardDeck {
-    fn new() -> CardDeck {
+    fn new() -> Self {
         let mut cards = Vec::new();
 
         for suit in Suit::iter() {
@@ -93,14 +93,20 @@ impl CardDeck {
 }
 
 pub struct Player {
+    number: usize,
     cards: Vec<Card>,
 }
 
 impl Player {
-    fn new() -> Player {
-        Player {
+    fn new(number: usize) -> Self {
+        Self {
+            number,
             cards: Vec::<Card>::new(),
         }
+    }
+
+    fn get_number(&self) -> usize {
+        self.number
     }
 
     fn add(&mut self, card: Card) {

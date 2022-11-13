@@ -2,20 +2,19 @@ use std::io;
 use super::{Card,CardDeck,GameState,Player};
 
 pub struct BlackJack {
-    deck: CardDeck,
-    players: Vec<Player>,
+    players: usize,
 }
 
 impl BlackJack {
-    pub fn new() -> BlackJack {
-        BlackJack {
-            deck: CardDeck::new(),
-            players: vec![Player::new(), Player::new()],
+    pub fn new(players: usize) -> Self {
+
+        Self {
+            players,
         }
     }
 
-    pub fn draw(&mut self) {
-        let mut card = self.deck.draw();
+    pub fn draw(deck: &mut CardDeck) -> Card {
+        let mut card = deck.draw();
         if let Card::ACE(_, suit) = card {
             'ace_value: loop {
                 let mut answer = String::new();
@@ -32,44 +31,79 @@ impl BlackJack {
                 }
             }
         }
-        if let Some(player) = self.players.get_mut(0) {
-            player.add(card);
-        }
+        card
     }
 
-    pub fn get_game_state(&self) -> GameState {
+    pub fn get_game_state(&self, player: &Player) -> GameState {
         let mut sum = 0;
 
-        std::process::Command::new("clear").status().unwrap();
+        for card in player.get_cards() {
+            sum = match card {
+                Card::TWO(_) => sum + 2,
+                Card::THREE(_) => sum + 3,
+                Card::FOUR(_) => sum + 4,
+                Card::FIVE(_) => sum + 5,
+                Card::SIX(_) => sum + 6,
+                Card::SEVEN(_) => sum + 7,
+                Card::EIGHT(_) => sum + 8,
+                Card::NINE(_) => sum + 9,
+                Card::TEN(_) => sum + 10,
+                Card::KING(_) => sum + 10,
+                Card::QUEEN(_) => sum + 10,
+                Card::JACK(_) => sum + 10,
+                Card::ACE(value, _) => sum + value,
+            };
+            println!("{}", card);
+        }
+        println!("\nYou're hand is at {}", sum);
 
-        if let Some(player) = self.players.get(0) {
-            for card in player.get_cards() {
-                sum = match card {
-                    Card::TWO(_) => sum + 2,
-                    Card::THREE(_) => sum + 3,
-                    Card::FOUR(_) => sum + 4,
-                    Card::FIVE(_) => sum + 5,
-                    Card::SIX(_) => sum + 6,
-                    Card::SEVEN(_) => sum + 7,
-                    Card::EIGHT(_) => sum + 8,
-                    Card::NINE(_) => sum + 9,
-                    Card::TEN(_) => sum + 10,
-                    Card::KING(_) => sum + 10,
-                    Card::QUEEN(_) => sum + 10,
-                    Card::JACK(_) => sum + 10,
-                    Card::ACE(value, _) => sum + value,
-                };
-                println!("{}", card);
-            }
-            println!("\nYou're hand is at {}", sum);
-
-            if sum > 21 {
-                return GameState::LOSE;
-            } else if sum == 21 {
-                return GameState::WIN;
-            }
+        if sum > 21 {
+            return GameState::LOSE;
+        } else if sum == 21 {
+            return GameState::WIN;
         }
 
         return GameState::CONTINUE;
+    }
+
+    pub fn play(&self) {
+        let mut deck = CardDeck::new();
+        let mut players: Vec<Player> = Vec::new();
+
+        for player in 0..self.players {
+            players.push(Player::new(player+1));
+        }
+
+        for player in players.iter_mut() {
+            'draw: loop {
+                let mut answer = String::new();
+
+                std::process::Command::new("clear").status().unwrap();
+                println!("Player {}\n", player.get_number());
+
+                match self.get_game_state(&player) {
+                    GameState::CONTINUE => (),
+                    GameState::WIN => {
+                        println!("You win!");
+                        break 'draw;
+                    }
+                    GameState::LOSE => {
+                        println!("You lose!");
+                        break 'draw;
+                    }
+                }
+
+                println!("Would you like a card?");
+                io::stdin()
+                    .read_line(&mut answer)
+                    .expect("Failed to read line.");
+
+                if answer.trim().eq("y") {
+                    player.add(BlackJack::draw(&mut deck));
+                } else {
+                    break 'draw;
+                }
+            }
+        }
     }
 }
