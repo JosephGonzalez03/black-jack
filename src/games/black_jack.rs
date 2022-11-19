@@ -10,7 +10,6 @@ pub struct BlackJack {
 
 impl BlackJack {
     pub fn new(players: usize) -> Self {
-
         Self {
             players,
         }
@@ -108,7 +107,7 @@ impl CardDeck {
             cards.push(Card::ACE(1, suit));
         }
 
-        CardDeck {
+        Self {
             cards,
         }
     }
