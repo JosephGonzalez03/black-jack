@@ -1,6 +1,8 @@
+use strum::IntoEnumIterator;
+use rand::Rng;
 use std::io;
 use std::cmp::Ordering;
-use super::{Card,CardDeck,Status,Player};
+use super::{Card,Suit,Status,Player};
 
 pub struct BlackJack {
     players: usize,
@@ -27,8 +29,8 @@ impl BlackJack {
                 let mut answer = String::new();
 
                 std::process::Command::new("clear").status().unwrap();
-                show_cards(player);
-                println!("Your hand is at {}", count_hand(player));
+                player.show_cards();
+                println!("Your hand is at {}", player.count_hand());
 
                 println!("Would you like a card?");
                 io::stdin()
@@ -36,9 +38,9 @@ impl BlackJack {
                     .expect("Failed to read line.");
 
                 if answer.trim().eq("y") {
-                    player.add(draw(&mut deck));
+                    player.add(deck.draw());
 
-                    let sum = count_hand(player);
+                    let sum = player.count_hand();
                     if sum > 21 {
                         break 'draw;
                     }
@@ -51,7 +53,7 @@ impl BlackJack {
 
         // Determine who is closest to 21 and who is over 21
         for player in players.iter_mut() {
-            let sum = count_hand(&player);
+            let sum = player.count_hand();
             if sum == 21 {
                 player.set_status(Status::WIN)
             } else if sum > 21 {
@@ -64,7 +66,7 @@ impl BlackJack {
         } else {
             players.retain(|player| player.get_status().eq(&Status::PLAYING));
             players.sort_by(|p1, p2| {
-                let diff = count_hand(p2) as i16 - count_hand(p1) as i16;
+                let diff = p2.count_hand() as i16 - p1.count_hand() as i16;
                 let order;
 
                 if diff > 0 {
@@ -82,53 +84,56 @@ impl BlackJack {
     }
 }
 
-fn draw(deck: &mut CardDeck) -> Card {
-    let mut card = deck.draw();
-    if let Card::ACE(_, suit) = card {
-        'ace_value: loop {
-            let mut answer = String::new();
-            println!("You drew an ace. Would you to treat it as a 1 or 11?");
-            io::stdin()
-                .read_line(&mut answer)
-                .expect("Failed to read line.");
+pub struct CardDeck {
+    cards: Vec<Card>,
+}
 
-            let answer: u16 = answer.trim().parse().expect("Please type a number!");
+impl CardDeck {
+    fn new() -> Self {
+        let mut cards = Vec::new();
 
-            if answer == 1 || answer == 11 {
-                card = Card::ACE(answer, suit);
-                break 'ace_value;
-            }
+        for suit in Suit::iter() {
+            cards.push(Card::TWO(2, suit));
+            cards.push(Card::THREE(3, suit));
+            cards.push(Card::FOUR(4, suit));
+            cards.push(Card::FIVE(5, suit));
+            cards.push(Card::SIX(6, suit));
+            cards.push(Card::SEVEN(7, suit));
+            cards.push(Card::EIGHT(8, suit));
+            cards.push(Card::NINE(9, suit));
+            cards.push(Card::TEN(10, suit));
+            cards.push(Card::KING(10, suit));
+            cards.push(Card::QUEEN(10, suit));
+            cards.push(Card::JACK(10, suit));
+            cards.push(Card::ACE(1, suit));
+        }
+
+        CardDeck {
+            cards,
         }
     }
-    card
-}
 
-fn show_cards(player: &Player) {
-    println!("Player {}\n", player.get_number());
-    for card in player.get_cards() {
-        println!("{}", card);
+    fn draw(&mut self) -> Card {
+        let mut rng = rand::thread_rng();
+        let new_index = rng.gen_range(0..self.cards.len());
+        let mut card = self.cards.remove(new_index);
+
+        if let Card::ACE(_, suit) = card {
+            'ace_value: loop {
+                let mut answer = String::new();
+                println!("You drew an ace. Would you to treat it as a 1 or 11?");
+                io::stdin()
+                    .read_line(&mut answer)
+                    .expect("Failed to read line.");
+
+                let answer: u16 = answer.trim().parse().expect("Please type a number!");
+
+                if answer == 1 || answer == 11 {
+                    card = Card::ACE(answer, suit);
+                    break 'ace_value;
+                }
+            }
+        }
+        card
     }
-}
-
-fn count_hand(player: &Player) -> u16 {
-    let mut sum = 0;
-
-    for card in player.get_cards() {
-        sum = match card {
-            Card::TWO(_) => sum + 2,
-            Card::THREE(_) => sum + 3,
-            Card::FOUR(_) => sum + 4,
-            Card::FIVE(_) => sum + 5,
-            Card::SIX(_) => sum + 6,
-            Card::SEVEN(_) => sum + 7,
-            Card::EIGHT(_) => sum + 8,
-            Card::NINE(_) => sum + 9,
-            Card::TEN(_) => sum + 10,
-            Card::KING(_) => sum + 10,
-            Card::QUEEN(_) => sum + 10,
-            Card::JACK(_) => sum + 10,
-            Card::ACE(value, _) => sum + value,
-        };
-    }
-    sum
 }
