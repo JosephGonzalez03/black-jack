@@ -32,7 +32,7 @@ pub enum Card {
     KING(Suit),
     QUEEN(Suit),
     JACK(Suit),
-    ACE(i16, Suit),
+    ACE(u16, Suit),
 }
 
 impl std::fmt::Display for Card {
