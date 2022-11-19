@@ -91,7 +91,7 @@ fn draw(deck: &mut CardDeck) -> Card {
                 .read_line(&mut answer)
                 .expect("Failed to read line.");
 
-            let answer: u16 = answer.trim().parse().expect("Please type a number!");
+            let answer: i16 = answer.trim().parse().expect("Please type a number!");
 
             if answer == 1 || answer == 11 {
                 card = Card::ACE(answer, suit);
@@ -109,8 +109,8 @@ fn show_cards(player: &Player) {
     }
 }
 
-fn count_hand(player: &Player) -> u16 {
-    let mut sum = 0;
+fn count_hand(player: &Player) -> i16 {
+    let mut sum: i16 = 0;
 
     for card in player.get_cards() {
         sum = match card {
