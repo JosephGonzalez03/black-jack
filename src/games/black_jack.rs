@@ -77,6 +77,7 @@ impl BlackJack {
                 order
             });
         }
+        std::process::Command::new("clear").status().unwrap();
         println!("Winner is Player {}", players.get(0).unwrap().get_number());
     }
 }
