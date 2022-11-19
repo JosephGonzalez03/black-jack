@@ -64,7 +64,7 @@ impl BlackJack {
         } else {
             players.retain(|player| player.get_status().eq(&Status::PLAYING));
             players.sort_by(|p1, p2| {
-                let diff = count_hand(p2) - count_hand(p1);
+                let diff = count_hand(p2) as i16 - count_hand(p1) as i16;
                 let order;
 
                 if diff > 0 {
