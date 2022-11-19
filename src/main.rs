@@ -4,7 +4,7 @@ pub mod games;
 
 fn main() {
     //let mut dealer_hand: [i32; 52] = [0;52];
-    let mut game = BlackJack::new(2);
+    let game = BlackJack::new(2);
 
     game.play();
 }

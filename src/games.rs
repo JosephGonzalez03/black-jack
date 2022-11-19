@@ -4,10 +4,11 @@ use strum_macros::{EnumIter};
 
 pub mod black_jack;
 
-pub enum GameState {
+#[derive(PartialEq)]
+pub enum Status {
     WIN,
     LOSE,
-    CONTINUE,
+    PLAYING,
 }
 
 #[derive(EnumIter, Copy, Clone, Debug)]
@@ -95,6 +96,7 @@ impl CardDeck {
 pub struct Player {
     number: usize,
     cards: Vec<Card>,
+    status: Status,
 }
 
 impl Player {
@@ -102,6 +104,7 @@ impl Player {
         Self {
             number,
             cards: Vec::<Card>::new(),
+            status: Status::PLAYING,
         }
     }
 
@@ -115,5 +118,13 @@ impl Player {
 
     fn get_cards(&self) -> &Vec<Card> {
         &self.cards
+    }
+
+    fn get_status(&self) -> &Status {
+        &self.status
+    }
+
+    fn set_status(&mut self, new_status: Status) {
+        self.status = new_status;
     }
 }
