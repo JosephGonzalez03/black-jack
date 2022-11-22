@@ -80,8 +80,8 @@ impl Player {
         &self.cards
     }
 
-    fn get_status(&self) -> &Status {
-        &self.status
+    fn is_status(&self, status: Status) -> bool {
+        self.status.eq(&status)
     }
 
     fn set_status(&mut self, new_status: Status) {

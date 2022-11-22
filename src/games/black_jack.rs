@@ -57,10 +57,10 @@ impl BlackJack {
             }
         });
 
-        if players.iter().any(|player| player.get_status() == &Status::WIN) {
-            players.retain(|player| player.get_status().eq(&Status::WIN));
+        if players.iter().any(|player| player.is_status(Status::WIN)) {
+            players.retain(|player| player.is_status(Status::WIN));
         } else {
-            players.retain(|player| player.get_status().eq(&Status::PLAYING));
+            players.retain(|player| player.is_status(Status::PLAYING));
             players.sort_by(|p1, p2| {
                 let diff = p2.count_hand() as i16 - p1.count_hand() as i16;
                 let order;
