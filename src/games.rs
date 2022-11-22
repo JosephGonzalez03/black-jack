@@ -90,15 +90,13 @@ impl Player {
 
     fn show_cards(&self) {
         println!("Player {}\n", self.get_number());
-        for card in self.get_cards() {
-            println!("{}", card);
-        }
+        self.cards.iter().for_each(|card| println!("{}", card));
     }
 
     fn count_hand(&self) -> u16 {
         let mut sum = 0;
 
-        for card in self.get_cards() {
+        self.cards.iter().for_each(|card| {
             sum = match card {
                 Card::TWO(value, _) => sum + value,
                 Card::THREE(value, _) => sum + value,
@@ -114,7 +112,7 @@ impl Player {
                 Card::JACK(value, _) => sum + value,
                 Card::ACE(value, _) => sum + value,
             };
-        }
+        });
         sum
     }
 }

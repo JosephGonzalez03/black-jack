@@ -23,7 +23,7 @@ impl BlackJack {
             players.push(Player::new(player+1));
         }
 
-        for player in players.iter_mut() {
+        players.iter_mut().for_each(|player| {
             'draw: loop {
                 let mut answer = String::new();
 
@@ -47,18 +47,17 @@ impl BlackJack {
                     break 'draw;
                 }
             }
-
-        }
+        });
 
         // Determine who is closest to 21 and who is over 21
-        for player in players.iter_mut() {
+        players.iter_mut().for_each(|player| {
             let sum = player.count_hand();
             if sum == 21 {
                 player.set_status(Status::WIN)
             } else if sum > 21 {
                 player.set_status(Status::LOSE);
             }
-        }
+        });
 
         if players.iter().any(|player| player.get_status() == &Status::WIN) {
             players.retain(|player| player.get_status().eq(&Status::WIN));
