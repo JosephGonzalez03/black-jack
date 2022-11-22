@@ -39,8 +39,7 @@ impl BlackJack {
                 if answer.trim().eq("y") {
                     player.add(deck.draw());
 
-                    let sum = player.count_hand();
-                    if sum > 21 {
+                    if player.count_hand() > 21 {
                         break 'draw;
                     }
                 } else {
@@ -51,11 +50,10 @@ impl BlackJack {
 
         // Determine who is closest to 21 and who is over 21
         players.iter_mut().for_each(|player| {
-            let sum = player.count_hand();
-            if sum == 21 {
-                player.set_status(Status::WIN)
-            } else if sum > 21 {
-                player.set_status(Status::LOSE);
+            match player.count_hand() {
+                21 => player.set_status(Status::WIN),
+                0..=20 => (),
+                _ => player.set_status(Status::LOSE)
             }
         });
 
