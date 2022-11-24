@@ -68,8 +68,12 @@ impl Player {
     }
 
     fn show_cards(&self) {
-        println!("Player {}\n", self.get_number());
+        println!("----------------------");
+        println!("|      Player {}      |", self.get_number());
+        println!("----------------------");
         self.cards.iter().for_each(|card| println!("{}", card));
+        println!("----------------------");
+        println!("Total: {}\n", self.count_hand());
     }
 
     fn count_hand(&self) -> u16 {
