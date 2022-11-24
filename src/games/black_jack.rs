@@ -48,6 +48,7 @@ impl BlackJack {
 
         std::process::Command::new("clear").status().unwrap();
         players.iter().for_each(|player| player.show_cards());
+        players.retain(|player| player.count_hand() <= 21);
         players.sort_by(|p1, p2| {
             let diff = p2.count_hand() as i16 - p1.count_hand() as i16;
             let order;
@@ -61,7 +62,6 @@ impl BlackJack {
             }
             order
         });
-        players.retain(|player| player.count_hand() <= 21);
         println!("++++++++++++++++++++++");
         println!("+ Winner is Player {} +", players.get(0).unwrap().get_number());
         println!("++++++++++++++++++++++");
