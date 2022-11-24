@@ -2,13 +2,6 @@ use strum_macros::{EnumIter};
 
 pub mod black_jack;
 
-#[derive(PartialEq)]
-pub enum Status {
-    WIN,
-    LOSE,
-    PLAYING,
-}
-
 #[derive(EnumIter, Copy, Clone, Debug)]
 pub enum Suit {
     CLUBS,
@@ -56,7 +49,6 @@ impl std::fmt::Display for Card {
 pub struct Player {
     number: usize,
     cards: Vec<Card>,
-    status: Status,
 }
 
 impl Player {
@@ -64,7 +56,6 @@ impl Player {
         Self {
             number,
             cards: Vec::<Card>::new(),
-            status: Status::PLAYING,
         }
     }
 
@@ -74,18 +65,6 @@ impl Player {
 
     fn add(&mut self, card: Card) {
         self.cards.push(card);
-    }
-
-    fn get_cards(&self) -> &Vec<Card> {
-        &self.cards
-    }
-
-    fn is_status(&self, status: Status) -> bool {
-        self.status.eq(&status)
-    }
-
-    fn set_status(&mut self, new_status: Status) {
-        self.status = new_status;
     }
 
     fn show_cards(&self) {

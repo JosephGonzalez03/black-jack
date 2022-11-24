@@ -2,7 +2,7 @@ use strum::IntoEnumIterator;
 use rand::Rng;
 use std::io;
 use std::cmp::Ordering;
-use super::{Card,Suit,Status,Player};
+use super::{Card,Suit,Player};
 
 pub struct BlackJack {
     players: usize,
@@ -49,32 +49,20 @@ impl BlackJack {
         });
 
         // Determine who is closest to 21 and who is over 21
-        players.iter_mut().for_each(|player| {
-            match player.count_hand() {
-                21 => player.set_status(Status::WIN),
-                0..=20 => (),
-                _ => player.set_status(Status::LOSE)
+        players.sort_by(|p1, p2| {
+            let diff = p2.count_hand() as i16 - p1.count_hand() as i16;
+            let order;
+
+            if diff > 0 {
+                order = Ordering::Greater;
+            } else if diff == 0 {
+                order = Ordering::Equal;
+            } else {
+                order = Ordering::Less;
             }
+            order
         });
-
-        if players.iter().any(|player| player.is_status(Status::WIN)) {
-            players.retain(|player| player.is_status(Status::WIN));
-        } else {
-            players.retain(|player| player.is_status(Status::PLAYING));
-            players.sort_by(|p1, p2| {
-                let diff = p2.count_hand() as i16 - p1.count_hand() as i16;
-                let order;
-
-                if diff > 0 {
-                    order = Ordering::Greater;
-                } else if diff == 0 {
-                    order = Ordering::Equal;
-                } else {
-                    order = Ordering::Less;
-                }
-                order
-            });
-        }
+        players.retain(|player| player.count_hand() <= 21);
         std::process::Command::new("clear").status().unwrap();
         println!("Winner is Player {}", players.get(0).unwrap().get_number());
     }
