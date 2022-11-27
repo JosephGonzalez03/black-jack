@@ -62,9 +62,9 @@ impl BlackJack {
             }
             order
         });
-        println!("++++++++++++++++++++++");
-        println!("+ Winner is Player {} +", players.get(0).unwrap().get_number());
-        println!("++++++++++++++++++++++");
+        println!("+++++++++++++++++++++++");
+        println!("+ Winner is Player {:<2} +", players.get(0).unwrap().get_number());
+        println!("+++++++++++++++++++++++");
     }
 }
 
