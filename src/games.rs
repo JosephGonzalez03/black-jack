@@ -1,4 +1,4 @@
-use strum_macros::{EnumIter};
+use strum_macros::EnumIter;
 
 pub mod black_jack;
 
