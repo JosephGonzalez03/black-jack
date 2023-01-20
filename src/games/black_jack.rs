@@ -1,8 +1,8 @@
-use strum::IntoEnumIterator;
+use super::{Card, Player, Suit};
 use rand::Rng;
-use std::io;
 use std::cmp::Ordering;
-use super::{Card,Suit,Player};
+use std::io;
+use strum::IntoEnumIterator;
 
 pub struct BlackJack {
     players: usize,
@@ -10,9 +10,7 @@ pub struct BlackJack {
 
 impl BlackJack {
     pub fn new(players: usize) -> Self {
-        Self {
-            players,
-        }
+        Self { players }
     }
 
     pub fn play(&self) {
@@ -20,29 +18,27 @@ impl BlackJack {
         let mut players: Vec<Player> = Vec::new();
 
         for player in 0..self.players {
-            players.push(Player::new(player+1));
+            players.push(Player::new(player + 1));
         }
 
-        players.iter_mut().for_each(|player| {
-            'draw: loop {
-                let mut answer = String::new();
+        players.iter_mut().for_each(|player| 'draw: loop {
+            let mut answer = String::new();
 
-                std::process::Command::new("clear").status().unwrap();
-                player.show_cards();
-                println!("Would you like a card?");
-                io::stdin()
-                    .read_line(&mut answer)
-                    .expect("Failed to read line.");
+            std::process::Command::new("clear").status().unwrap();
+            player.show_cards();
+            println!("Would you like a card?");
+            io::stdin()
+                .read_line(&mut answer)
+                .expect("Failed to read line.");
 
-                if answer.trim().eq("y") {
-                    player.add(deck.draw());
+            if answer.trim().eq("y") {
+                player.add(deck.draw());
 
-                    if player.count_hand() > 21 {
-                        break 'draw;
-                    }
-                } else {
+                if player.count_hand() > 21 {
                     break 'draw;
                 }
+            } else {
+                break 'draw;
             }
         });
 
@@ -63,7 +59,10 @@ impl BlackJack {
             order
         });
         println!("+++++++++++++++++++++++");
-        println!("+ Winner is Player {:<2} +", players.get(0).unwrap().get_number());
+        println!(
+            "+ Winner is Player {:<2} +",
+            players.get(0).unwrap().get_number()
+        );
         println!("+++++++++++++++++++++++");
     }
 }
@@ -92,9 +91,7 @@ impl CardDeck {
             cards.push(Card::ACE(1, suit));
         }
 
-        Self {
-            cards,
-        }
+        Self { cards }
     }
 
     fn draw(&mut self) -> Card {
